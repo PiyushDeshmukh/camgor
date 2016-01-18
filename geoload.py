@@ -96,7 +96,7 @@ def gather_coordinates():
 
     fh = open("where.data", 'r')
 
-    for line in fh
+    for line in fh:
         address = line.strip()
         serviceurl = "http://maps.googleapis.com/maps/api/geocode/json?"
         url = serviceurl + urllib.urlencode({"sensor":"false", "address": address})
@@ -136,5 +136,5 @@ if __name__ == '__main__':
         fh.write(loc + '\n')
     fh.close()
 
-    gather_coordinates()
+    #gather_coordinates()
     os.system("python geodump.py")
