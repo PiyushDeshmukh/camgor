@@ -14,6 +14,8 @@ def get_input(flag):
 
     #if flag:
     url = raw_input('Enter the git repo url : ')
+    if url == "":
+        return "https://github.com/torvalds/linux.git"
     return url
 
 def get_api_url(url):
@@ -24,7 +26,6 @@ def get_api_url(url):
     """
 
     serviceurl = "https://api.github.com/repos/"
-    #https://github.com/torvalds/linux.git
     splitted_url = url.split('/')
     user = splitted_url[3]
     repo = splitted_url[4].split('.')[0]
@@ -117,7 +118,8 @@ def gather_coordinates():
     fh.close()
 
 if __name__ == '__main__':
-    hit_url = get_api_url(get_input(True))
+    url = get_input(True)
+    hit_url = get_api_url(url)
     user_names = fetch_user_names(hit_url)
     while user_names[0] == "Try again":
         user_names = fetch_user_names(hit_url)
