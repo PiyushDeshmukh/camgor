@@ -85,7 +85,7 @@ def gather_coordinates():
     # scontext = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
     scontext = None
 
-    conn = sqlite3.connect('geodata.sqlite')
+    conn = sqlite3.connect('coordinates.sqlite')
     cur = conn.cursor()
 
 

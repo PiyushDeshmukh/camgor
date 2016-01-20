@@ -2,7 +2,7 @@ import sqlite3
 import json
 import codecs
 
-conn = sqlite3.connect('geodata.sqlite')
+conn = sqlite3.connect('Locations.sqlite')
 cur = conn.cursor()
 
 cur.execute('SELECT * FROM Locations')
