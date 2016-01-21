@@ -5,7 +5,7 @@ import json
 import time
 import ssl
 
-def get_input(flag):
+def get_input():
     """
     Get input on basis of either
         * Git repo url
@@ -14,7 +14,7 @@ def get_input(flag):
 
     #if flag:
     url = raw_input('Enter the git repo url : ')
-    if url == "":
+    if len(url) < 5:
         return "https://github.com/torvalds/linux.git"
     return url
 
@@ -90,10 +90,10 @@ def gather_coordinates():
 
 
     cur.execute('''
-    DROP TABLE IF EXISTS Locations''')
+    DROP TABLE IF EXISTS Locations;''')
 
     cur.execute('''
-    CREATE TABLE Locations (address TEXT, geodata TEXT)''')
+    CREATE TABLE Locations (address TEXT, geodata TEXT);''')
 
     fh = open("where.data", 'r')
 
@@ -118,7 +118,7 @@ def gather_coordinates():
     fh.close()
 
 if __name__ == '__main__':
-    url = get_input(True)
+    url = get_input()
     hit_url = get_api_url(url)
     user_names = fetch_user_names(hit_url)
     while user_names[0] == "Try again":
@@ -139,4 +139,4 @@ if __name__ == '__main__':
     fh.close()
 
     #gather_coordinates()
-    os.system("python geodump.py")
+    os.system("python dump.py")
