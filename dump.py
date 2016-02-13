@@ -2,10 +2,10 @@ import sqlite3
 import json
 import codecs
 
-conn = sqlite3.connect('coordinates.sqlite')
+conn = sqlite3.connect('coordinates.db')
 cur = conn.cursor()
 
-cur.execute('SELECT * FROM Locations')
+cur.execute("SELECT * FROM Locations;")
 fhand = codecs.open('where.js','w', "utf-8")
 fhand.write("myData = [\n")
 count = 0

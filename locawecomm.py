@@ -5,6 +5,8 @@ import json
 import time
 import ssl
 
+github_api_token = "219ad60925b33da070fb9c22ddcfa1517b9ee226"
+
 def get_input():
     """
     Get input on basis of either
@@ -29,7 +31,7 @@ def get_api_url(url):
     splitted_url = url.split('/')
     user = splitted_url[3]
     repo = splitted_url[4].split('.')[0]
-    hit_url = serviceurl + user + '/' + repo + '/contributors'
+    hit_url = serviceurl + user + '/' + repo + '/contributors' + "?Authorization=" + github_api_token
     return hit_url
 
 def fetch_user_names(hit_url):
@@ -42,14 +44,19 @@ def fetch_user_names(hit_url):
     try:
         handler = urllib.urlopen(hit_url)
         data = handler.read()
-        js = json.loads(str(data))#[0]
+        js = json.loads(str(data))
+        print(js)
+        print("\n\n")
         user_names = []
         for user in js:
             user_names.append(user["login"])
+        print(user_names)
+        print("\n\n")
         return user_names
-    except:
+    except Exception as e:
+        print(e)
         if 'Y' == raw_input("Could not fetch urls. Try again? (Y/N) : "):
-            return ["Try again"]
+            return "Try again"
         else:
             return None
 
@@ -64,14 +71,17 @@ def fetch_user_locations(user_names):
     try:
         user_locations = []
         for user in user_names:
-            handler = urllib.urlopen(serviceurl + user)
+            handler = urllib.urlopen(serviceurl + user + "?Authorization=" + github_api_token)
             data = handler.read()
             js = json.loads(str(data))#[0]
+            #print(js)
             user_locations.append(js["location"])
+            print(user_locations)
         return user_locations
-    except:
+    except Exception as e:
+        print(e)
         if 'Y' == raw_input("Could not fetch locations. Try again? (Y/N) : "):
-            return ["Try again"]
+            return "Try again"
         else:
             return None
 
@@ -85,12 +95,12 @@ def gather_coordinates():
     # scontext = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
     scontext = None
 
-    conn = sqlite3.connect('coordinates.sqlite')
+    conn = sqlite3.connect('coordinates.db')
     cur = conn.cursor()
 
 
-    cur.execute('''
-    DROP TABLE IF EXISTS Locations;''')
+    #cur.execute('''
+    #DROP TABLE IF EXISTS Locations;''')
 
     cur.execute('''
     CREATE TABLE Locations (address TEXT, geodata TEXT);''')
@@ -121,22 +131,28 @@ if __name__ == '__main__':
     url = get_input()
     hit_url = get_api_url(url)
     user_names = fetch_user_names(hit_url)
-    while user_names[0] == "Try again":
+    while user_names == "Try again":
         user_names = fetch_user_names(hit_url)
 
     user_locations = fetch_user_locations(user_names)
-    while user_locations[0] == "Try again":
+    while user_locations == "Try again":
         user_locations = fetch_user_locations(user_names)
 
     '''Explicit locations for offine testing'''
     #user_locations = [u'Portland, OR', None, u'Edinburgh, Scotland', u'Nuremberg', None, None, None, None, None, u'Taiwan', u'Basel, Switzerland', None, None, None, None, None, None, None, None, None, None, None, u'Sweden', None, None, u'Canberra', None, u'Mebane, NC', u'San Francisco, CA, U.S.A.', None]
 
-    user_locations = map(lambda x: str(x) , filter(lambda x: x != None, user_locations))
+    #user_locations = map(lambda x: x.encode('ascii').decode('cp037') , filter(lambda x: x != None, user_locations))
+    user_loc = []
+    for loc in filter(lambda x: x != None, user_locations):
+        try:
+            user_loc.append(x.encode('ascii').decode('cp037'))
+        except:
+            pass
 
     fh = open('where.data', 'w')
-    for loc in user_locations:
+    for loc in user_loc:
         fh.write(loc + '\n')
     fh.close()
 
-    #gather_coordinates()
+    gather_coordinates()
     os.system("python dump.py")
