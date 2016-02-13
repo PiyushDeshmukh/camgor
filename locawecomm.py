@@ -79,6 +79,8 @@ def fetch_user_locations(user_names):
             print(user_locations)
         return user_locations
     except Exception as e:
+        if len(user_locations) != 0:
+            return user_locations
         print(e)
         if 'Y' == raw_input("Could not fetch locations. Try again? (Y/N) : "):
             return "Try again"
@@ -130,13 +132,17 @@ def gather_coordinates():
 if __name__ == '__main__':
     url = get_input()
     hit_url = get_api_url(url)
+    print("Attempting to fetch user names\n")
     user_names = fetch_user_names(hit_url)
     while user_names == "Try again":
         user_names = fetch_user_names(hit_url)
+    print("Successfully fetched user names!\n")
 
+    print("Attempting to fetch user locations\n")
     user_locations = fetch_user_locations(user_names)
     while user_locations == "Try again":
         user_locations = fetch_user_locations(user_names)
+    print("Successfully fetched user locations!\n")
 
     '''Explicit locations for offine testing'''
     #user_locations = [u'Portland, OR', None, u'Edinburgh, Scotland', u'Nuremberg', None, None, None, None, None, u'Taiwan', u'Basel, Switzerland', None, None, None, None, None, None, None, None, None, None, None, u'Sweden', None, None, u'Canberra', None, u'Mebane, NC', u'San Francisco, CA, U.S.A.', None]
