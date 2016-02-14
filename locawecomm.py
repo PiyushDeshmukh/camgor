@@ -5,7 +5,7 @@ import json
 import time
 import ssl
 
-github_api_token = "219ad60925b33da070fb9c22ddcfa1517b9ee226"
+github_api_token = "0d821d633355841c12195ca0dbd23d05bebe72fb"
 
 def get_input():
     """
@@ -50,8 +50,10 @@ def fetch_user_names(hit_url):
         user_names = []
         for user in js:
             user_names.append(user["login"])
-        print(user_names)
-        print("\n\n")
+        print("The top contributors are\n")
+        for user in user_names:
+            print(user.encode('ascii', 'ignore'))
+        print("\n")
         return user_names
     except Exception as e:
         print(e)
@@ -157,17 +159,17 @@ if __name__ == '__main__':
         except Exception as e:
             print(e , "during", loc)
             pass
-    print("Successfully filtered the locations!")
+    print("Successfully filtered the locations!\n")
 
     print("Writing to file ...")
     fh = open('where.data', 'w')
     for loc in user_loc:
         fh.write(loc + '\n')
     fh.close()
-    print("Successfully written to file!")
+    print("Successfully written to file!\n")
     print("Data : ", user_loc)
 
-    print("Gathering coordinates of user locations ... ")
+    print("\nGathering coordinates of user locations ... ")
     gather_coordinates()
-    print("Successfully gathered coordinates of user locations!")
+    print("Successfully gathered coordinates of user locations!\n")
     os.system("python dump.py")
