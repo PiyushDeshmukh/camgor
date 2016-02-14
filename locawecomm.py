@@ -101,8 +101,8 @@ def gather_coordinates():
     cur = conn.cursor()
 
 
-    #cur.execute('''
-    #DROP TABLE IF EXISTS Locations;''')
+    cur.execute('''
+    DROP TABLE IF EXISTS Locations;''')
 
     cur.execute('''
     CREATE TABLE Locations (address TEXT, geodata TEXT);''')
@@ -145,20 +145,29 @@ if __name__ == '__main__':
     print("Successfully fetched user locations!\n")
 
     '''Explicit locations for offine testing'''
+    # user_locations = [u'Germany', None, u'Spain', u'Taipei, Taiwan', None, None, u'London', u'Kaunas, Lithuania', u'Czech Republic', u'S\xe3o Paulo, Brazil', u'Lausanne, Switzerland', u'Pakistan', None, None, u'Strasbourg, France', None, None, u'SAN DIEGO', None, None, u'Brooklyn', u'Slovakia', u'London, UK', None, None, None, u'India', None, None, u'London']
     #user_locations = [u'Portland, OR', None, u'Edinburgh, Scotland', u'Nuremberg', None, None, None, None, None, u'Taiwan', u'Basel, Switzerland', None, None, None, None, None, None, None, None, None, None, None, u'Sweden', None, None, u'Canberra', None, u'Mebane, NC', u'San Francisco, CA, U.S.A.', None]
 
-    #user_locations = map(lambda x: x.encode('ascii').decode('cp037') , filter(lambda x: x != None, user_locations))
+    print("Filering the locations ... ")
     user_loc = []
     for loc in filter(lambda x: x != None, user_locations):
         try:
-            user_loc.append(x.encode('ascii').decode('cp037'))
-        except:
+            # user_loc.append(loc.encode('ascii').decode('cp037'))
+            user_loc.append(loc.encode('ascii', 'ignore'))
+        except Exception as e:
+            print(e , "during", loc)
             pass
+    print("Successfully filtered the locations!")
 
+    print("Writing to file ...")
     fh = open('where.data', 'w')
     for loc in user_loc:
         fh.write(loc + '\n')
     fh.close()
+    print("Successfully written to file!")
+    print("Data : ", user_loc)
 
+    print("Gathering coordinates of user locations ... ")
     gather_coordinates()
+    print("Successfully gathered coordinates of user locations!")
     os.system("python dump.py")
