@@ -5,7 +5,7 @@ import json
 import time
 import ssl
 
-github_api_token = "0d821d633355841c12195ca0dbd23d05bebe72fb"
+github_api_token = "63bd9cf13e63df501e98ff057e8daa508dad0085"
 
 def get_input():
     """
@@ -14,7 +14,6 @@ def get_input():
         * User and Repository individually
     """
 
-    #if flag:
     url = raw_input('Enter the git repo url : ')
     if len(url) < 5:
         return "https://github.com/torvalds/linux.git"
@@ -75,8 +74,7 @@ def fetch_user_locations(user_names):
         for user in user_names:
             handler = urllib.urlopen(serviceurl + user + "?Authorization=" + github_api_token)
             data = handler.read()
-            js = json.loads(str(data))#[0]
-            #print(js)
+            js = json.loads(str(data))
             user_locations.append(js["location"])
             print(user_locations)
         return user_locations
@@ -146,9 +144,6 @@ if __name__ == '__main__':
         user_locations = fetch_user_locations(user_names)
     print("Successfully fetched user locations!\n")
 
-    '''Explicit locations for offine testing'''
-    # user_locations = [u'Germany', None, u'Spain', u'Taipei, Taiwan', None, None, u'London', u'Kaunas, Lithuania', u'Czech Republic', u'S\xe3o Paulo, Brazil', u'Lausanne, Switzerland', u'Pakistan', None, None, u'Strasbourg, France', None, None, u'SAN DIEGO', None, None, u'Brooklyn', u'Slovakia', u'London, UK', None, None, None, u'India', None, None, u'London']
-    #user_locations = [u'Portland, OR', None, u'Edinburgh, Scotland', u'Nuremberg', None, None, None, None, None, u'Taiwan', u'Basel, Switzerland', None, None, None, None, None, None, None, None, None, None, None, u'Sweden', None, None, u'Canberra', None, u'Mebane, NC', u'San Francisco, CA, U.S.A.', None]
 
     print("Filering the locations ... ")
     user_loc = []
