@@ -30,8 +30,10 @@ def get_api_url(url):
     splitted_url = url.split('/')
     user = splitted_url[3]
     repo = splitted_url[4].split('.')[0]
-    hit_url = serviceurl + user + '/' + repo + '/contributors' + "?access_token=" + github_api_token
-    return hit_url
+    hit_url1 = serviceurl + user + '/' + repo + '/contributors' + "?access_token=" + github_api_token + "&page=1"
+    hit_url2 = serviceurl + user + '/' + repo + '/contributors' + "?access_token=" + github_api_token + "&page=2"
+    hit_url3 = serviceurl + user + '/' + repo + '/contributors' + "?access_token=" + github_api_token + "&page=3"
+    return [hit_url1, hit_url2, hit_url3]
 
 def fetch_user_names(hit_url):
     """
@@ -41,14 +43,15 @@ def fetch_user_names(hit_url):
     """
 
     try:
-        handler = urllib.urlopen(hit_url)
-        data = handler.read()
-        js = json.loads(str(data))
-        print(js)
-        print("\n\n")
         user_names = []
-        for user in js:
-            user_names.append(user["login"])
+        for url in hit_url:
+            handler = urllib.urlopen(url)
+            data = handler.read()
+            js = json.loads(str(data))
+            print(js)
+            print("\n\n")
+            for user in js:
+                user_names.append(user["login"])
         print("The top contributors are\n")
         for user in user_names:
             print(user.encode('ascii', 'ignore'))
