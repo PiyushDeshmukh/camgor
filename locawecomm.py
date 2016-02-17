@@ -45,16 +45,17 @@ def fetch_user_names(hit_url):
     try:
         user_names = []
         for url in hit_url:
+            print("\nFetching json ...")
             handler = urllib.urlopen(url)
             data = handler.read()
             js = json.loads(str(data))
-            print(js)
-            print("\n\n")
+            print("Fetched json!")
             for user in js:
                 user_names.append(user["login"])
-        print("The top contributors are\n")
+        print("\n\nThe top contributors are\n")
         for user in user_names:
-            print(user.encode('ascii', 'ignore'))
+            display = "%30s" % (user.encode('ascii', 'ignore'))
+            print(display)
         print("\n")
         return user_names
     except Exception as e:
@@ -79,7 +80,8 @@ def fetch_user_locations(user_names):
             data = handler.read()
             js = json.loads(str(data))
             user_locations.append(js["location"])
-            print(user_locations)
+            display = "%30s %40s" % (user, js["location"])
+            print(display)
         return user_locations
     except Exception as e:
         if len(user_locations) != 0:
