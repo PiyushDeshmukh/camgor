@@ -5,7 +5,7 @@ import json
 import time
 import ssl
 
-github_api_token = "63bd9cf13e63df501e98ff057e8daa508dad0085"
+github_api_token = "fc834b3d74be53c58553b653e4b6b43be910dc05"
 
 def get_input():
     """
@@ -30,7 +30,7 @@ def get_api_url(url):
     splitted_url = url.split('/')
     user = splitted_url[3]
     repo = splitted_url[4].split('.')[0]
-    hit_url = serviceurl + user + '/' + repo + '/contributors' + "?Authorization=" + github_api_token
+    hit_url = serviceurl + user + '/' + repo + '/contributors' + "?access_token=" + github_api_token
     return hit_url
 
 def fetch_user_names(hit_url):
@@ -72,7 +72,7 @@ def fetch_user_locations(user_names):
     try:
         user_locations = []
         for user in user_names:
-            handler = urllib.urlopen(serviceurl + user + "?Authorization=" + github_api_token)
+            handler = urllib.urlopen(serviceurl + user + "?access_token=" + github_api_token)
             data = handler.read()
             js = json.loads(str(data))
             user_locations.append(js["location"])
