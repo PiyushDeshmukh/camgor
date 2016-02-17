@@ -81,6 +81,8 @@ def fetch_user_locations(user_names):
             js = json.loads(str(data))
             user_locations.append(js["location"])
             display = "%30s %40s" % (user, js["location"])
+            if js["location"] is None:
+                display = "%30s %40s" % (user, " ")
             print(display)
         return user_locations
     except Exception as e:
