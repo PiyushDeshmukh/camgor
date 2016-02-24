@@ -5,13 +5,13 @@ import json
 import time
 import ssl
 
-github_api_token = "fc834b3d74be53c58553b653e4b6b43be910dc05"
+github_api_token = open("token.txt", 'r').read()
 
 def get_input():
     """
-    Get input on basis of either
-        * Git repo url
-        * User and Repository individually
+    Get the git repository url
+    if nothing is entered, then default points to linux repository owned by Linus Torvalds
+        url: string type holdig the git repo url
     """
 
     url = raw_input('Enter the git repo url : ')
