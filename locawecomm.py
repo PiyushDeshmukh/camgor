@@ -5,7 +5,7 @@ import json
 import time
 import ssl
 
-github_api_token = open("token.txt", 'r').read()
+github_api_token = open("token.txt", 'r').read().strip()
 
 def get_input():
     """
@@ -31,8 +31,8 @@ def get_api_url(url):
     user = splitted_url[3]
     repo = splitted_url[4].split('.')[0]
     #hit_url = []
-    # /contributors
-    hit_url = serviceurl + user + '/' + repo + '/stargazers' + "?access_token=" + github_api_token
+    # /contributors or /stargazers or watchers
+    hit_url = serviceurl + user + '/' + repo + '/contributors' + "?access_token=" + github_api_token
     return hit_url
 
 def fetch_user_names(hit_url):
