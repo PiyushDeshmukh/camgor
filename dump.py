@@ -28,7 +28,8 @@ for row in cur :
         if count > 1 : fhand.write(",\n")
         output = "["+str(lat)+","+str(lng)+", '"+where+"']"
         fhand.write(output)
-    except:
+    except Exception as e:
+	print(e)
         continue
 
 fhand.write("\n];\n")

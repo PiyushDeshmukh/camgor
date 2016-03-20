@@ -44,7 +44,7 @@ def fetch_user_names(hit_url):
 
     try:
         user_names = []
-        for i in xrange(1, 15+1):
+        for i in xrange(1, 2):#15+1):
             print("\nFetching json ...")
             handler = urllib.urlopen(hit_url + "&page=" + str(i))
             data = handler.read()
@@ -176,4 +176,4 @@ if __name__ == '__main__':
     print("\nGathering coordinates of user locations ... ")
     gather_coordinates()
     print("Successfully gathered coordinates of user locations!\n")
-    os.system("python dump.py")
+    os.system("python2 dump.py")
