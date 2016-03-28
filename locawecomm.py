@@ -24,17 +24,18 @@ def get_api_url(url):
     hit_url = serviceurl + user + '/' + repo + '/contributors' + "?access_token=" + github_api_token
     return hit_url
 
-def fetch_user_names(hit_url):
+def fetch_user_names(hit_url, number):
     """
-    Returns a list of user names who contributed to that repo(not all)
+    Returns a list of user names who contributed to that repo
         hit_url: string
         user_names: list of strings
     """
 
     try:
         user_names = []
-        for i in xrange(1, 2):#15+1):
-            print("\nFetching json ...")
+        number = int(number)
+        for i in xrange(1, number+1):
+            print("\nFetching json for page " + str(i) + " ...")
             handler = urllib.urlopen(hit_url + "&page=" + str(i))
             data = handler.read()
             js = json.loads(str(data))
@@ -133,10 +134,10 @@ def generate_map(url):
         map_file.writelines(map_visualize)
     print("Map successfully created!\n")
 
-def main(url):
+def main(url, number):
     hit_url = get_api_url(url)
     print("Attempting to fetch user names\n")
-    user_names = fetch_user_names(hit_url)
+    user_names = fetch_user_names(hit_url, number)
     print("Successfully fetched user names!\n")
 
     print("Attempting to fetch user locations\n")
@@ -167,11 +168,11 @@ def main(url):
 
 if __name__ == '__main__':
     parser = optparse.OptionParser(usage="usage: %prog [options] filename", version="%prog 1.0")
-    parser.add_option("-n", "--number", dest = "max_number", default = 10, help = "Specify the number of people to be searched for")
+    parser.add_option("-n", "--number", dest = "max_number", default = 10, help = "Specify the number of pages to be searched for")
     parser.add_option("-u", "--url", dest = "git_url", default = "https://github.com/python/pythondotorg.git", help = "Specify the url of git repository")
     options, args = parser.parse_args()
 
-    main(options.git_url)
+    main(options.git_url, options.max_number)
 
     os.system("python2 dump.py")
     generate_map(options.git_url)
