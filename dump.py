@@ -36,4 +36,3 @@ fhand.write("\n];\n")
 cur.close()
 fhand.close()
 print count, "records written to where.js"
-print "Open where.html to view the data in a browser"

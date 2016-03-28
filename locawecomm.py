@@ -4,20 +4,9 @@ import sqlite3
 import json
 import time
 import ssl
+import optparse
 
 github_api_token = open("token.txt", 'r').read().strip()
-
-def get_input():
-    """
-    Get the git repository url
-    if nothing is entered, then default points to linux repository owned by Linus Torvalds
-        url: string type holdig the git repo url
-    """
-
-    url = raw_input('Enter the git repo url : ')
-    if len(url) < 5:
-        return "https://github.com/torvalds/linux.git"
-    return url
 
 def get_api_url(url):
     """
@@ -62,11 +51,7 @@ def fetch_user_names(hit_url):
         return user_names
     except Exception as e:
         print(e)
-        if 'Y' == raw_input("Could not fetch urls. Try again? (Y/N) : "):
-            return "Try again"
-        else:
-            return None
-
+        exit()
 def fetch_user_locations(user_names):
     """
     Returns a list of addresses of users who had contributed to that repo(not all)
@@ -91,11 +76,7 @@ def fetch_user_locations(user_names):
         if len(user_locations) != 0:
             return user_locations
         print(e)
-        if 'Y' == raw_input("Could not fetch locations. Try again? (Y/N) : "):
-            return "Try again"
-        else:
-            return None
-
+        exit()
 def gather_coordinates():
     """
     Gathers coordinates of all the locations that are stored in where.data
@@ -138,27 +119,34 @@ def gather_coordinates():
     conn.close()
     fh.close()
 
-if __name__ == '__main__':
-    url = get_input()
+def generate_map(url):
+    print("Creating the map.")
+    map_blueprint = open("where.html", "r")#.read().split("\n")
+    map_visualize = []
+    for index, line in enumerate(map_blueprint):
+        if index == 4:
+            map_visualize.append("    <title>" + str(url.split('/')[4].split('.')[0]) + "</title>")
+        else:
+            map_visualize.append(line)
+    map_blueprint.close()
+    with open("map.html", "w") as map_file:
+        map_file.writelines(map_visualize)
+    print("Map successfully created!\n")
+
+def main(url):
     hit_url = get_api_url(url)
     print("Attempting to fetch user names\n")
     user_names = fetch_user_names(hit_url)
-    while user_names == "Try again":
-        user_names = fetch_user_names(hit_url)
     print("Successfully fetched user names!\n")
 
     print("Attempting to fetch user locations\n")
     user_locations = fetch_user_locations(user_names)
-    while user_locations == "Try again":
-        user_locations = fetch_user_locations(user_names)
     print("Successfully fetched user locations!\n")
-
 
     print("Filering the locations ... ")
     user_loc = []
     for loc in filter(lambda x: x != None, user_locations):
         try:
-            # user_loc.append(loc.encode('ascii').decode('cp037'))
             user_loc.append(loc.encode('ascii', 'ignore'))
         except Exception as e:
             print(e , "during", loc)
@@ -176,4 +164,17 @@ if __name__ == '__main__':
     print("\nGathering coordinates of user locations ... ")
     gather_coordinates()
     print("Successfully gathered coordinates of user locations!\n")
+
+if __name__ == '__main__':
+    parser = optparse.OptionParser(usage="usage: %prog [options] filename", version="%prog 1.0")
+    parser.add_option("-n", "--number", dest = "max_number", default = 10, help = "Specify the number of people to be searched for")
+    parser.add_option("-u", "--url", dest = "git_url", default = "https://github.com/python/pythondotorg.git", help = "Specify the url of git repository")
+    options, args = parser.parse_args()
+
+    main(options.git_url)
+
     os.system("python2 dump.py")
+    generate_map(options.git_url)
+    print "Opening map.html for visualization!"
+    os.system("firefox map.html")
+    os.system("rm map.html")
