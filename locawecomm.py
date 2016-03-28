@@ -168,11 +168,13 @@ def main(url, number, category):
 
 if __name__ == '__main__':
     parser = optparse.OptionParser(usage="usage: %prog [options] filename", version="%prog 1.0")
-    parser.add_option("-n", "--number", dest = "max_number", default = 10, help = "Specify the number of pages to be searched for")
-    parser.add_option("-u", "--url", dest = "git_url", default = "https://github.com/python/pythondotorg.git", help = "Specify the url of git repository")
-    parser.add_option("-c", "--contributors", dest = "contributors", default = True, action = "store_true")
-    parser.add_option("-s", "--stargazers", dest = "stargazers", default = False, action = "store_true")
-    parser.add_option("-w", "--watchers", dest = "watchers", default = False, action = "store_true")
+    parser.add_option("-n", "--number", dest = "max_number", default = 1, help = "Specify the number of pages to be searched for. The default value is 1.")
+    parser.add_option("-u", "--url", dest = "git_url", default = "https://github.com/python/pythondotorg.git", help = "Specify the url of git repository. The default points to https://github.com/python/pythondotorg.git.")
+    parser.add_option("-c", "--contributors", dest = "contributors", default = True, action = "store_true", help = "Use this flag if you want to display contributors on the map, this is the default choice.")
+    parser.add_option("-s", "--stargazers", dest = "stargazers", default = False, action = "store_true", help = "Use this flag if you want to display stargazers on the map.")
+    parser.add_option("-w", "--watchers", dest = "watchers", default = False, action = "store_true", help = "Use this flag if you want to display watchers on the map.")
+    parser.add_option("-d", "--keep-database", dest = "keep_db", default = False, action = "store_true", help = "This option disables the deletion of intermediate database file.")
+    parser.add_option("-l", "--keep-location-files", dest = "keep_locations", default = False, action = "store_true", help = "This option disables the deletion of intermediate location file.")
     options, args = parser.parse_args()
 
     category = "contributors"
@@ -186,4 +188,9 @@ if __name__ == '__main__':
     generate_map(options.git_url)
     print "Opening map.html for visualization!"
     os.system("firefox map.html")
+
+    if not options.keep_db:
+        os.system("rm coordinates.db")
+    if not options.keep_locations:
+        os.system("rm where.data")
     os.system("rm map.html")
