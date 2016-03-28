@@ -8,7 +8,7 @@ import optparse
 
 github_api_token = open("token.txt", 'r').read().strip()
 
-def get_api_url(url):
+def get_api_url(url, category):
     """
     Return the url corresponding to the api
         url: string
@@ -21,7 +21,7 @@ def get_api_url(url):
     repo = splitted_url[4].split('.')[0]
     #hit_url = []
     # /contributors or /stargazers or watchers
-    hit_url = serviceurl + user + '/' + repo + '/contributors' + "?access_token=" + github_api_token
+    hit_url = serviceurl + user + '/' + repo + '/' + category + "?access_token=" + github_api_token
     return hit_url
 
 def fetch_user_names(hit_url, number):
@@ -134,8 +134,8 @@ def generate_map(url):
         map_file.writelines(map_visualize)
     print("Map successfully created!\n")
 
-def main(url, number):
-    hit_url = get_api_url(url)
+def main(url, number, category):
+    hit_url = get_api_url(url, category)
     print("Attempting to fetch user names\n")
     user_names = fetch_user_names(hit_url, number)
     print("Successfully fetched user names!\n")
@@ -170,9 +170,17 @@ if __name__ == '__main__':
     parser = optparse.OptionParser(usage="usage: %prog [options] filename", version="%prog 1.0")
     parser.add_option("-n", "--number", dest = "max_number", default = 10, help = "Specify the number of pages to be searched for")
     parser.add_option("-u", "--url", dest = "git_url", default = "https://github.com/python/pythondotorg.git", help = "Specify the url of git repository")
+    parser.add_option("-c", "--contributors", dest = "contributors", default = True, action = "store_true")
+    parser.add_option("-s", "--stargazers", dest = "stargazers", default = False, action = "store_true")
+    parser.add_option("-w", "--watchers", dest = "watchers", default = False, action = "store_true")
     options, args = parser.parse_args()
 
-    main(options.git_url, options.max_number)
+    category = "contributors"
+    if options.stargazers == True:
+        category = "stargazers"
+    elif options.watchers == True:
+        category = "watchers"
+    main(options.git_url, options.max_number, category)
 
     os.system("python2 dump.py")
     generate_map(options.git_url)
