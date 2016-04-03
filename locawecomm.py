@@ -5,6 +5,7 @@ import json
 import time
 import ssl
 import optparse
+import math
 
 github_api_token = open("token.txt", 'r').read().strip()
 
@@ -34,9 +35,10 @@ def fetch_user_names(hit_url, number):
     try:
         user_names = []
         number = int(number)
-        for i in xrange(1, number+1):
-            print("\nFetching json for page " + str(i) + " ...")
-            handler = urllib.urlopen(hit_url + "&page=" + str(i))
+        pages = int(math.ceil(number/100.0))
+        for page in xrange(pages):
+            print("\nFetching json for page " + str(page+1))
+            handler = urllib.urlopen(hit_url + "&page=" + str(page+1) + "&per_page=" + str(100 if page != pages-1 else number%100))
             data = handler.read()
             js = json.loads(str(data))
             print("Fetched json!")
@@ -44,6 +46,7 @@ def fetch_user_names(hit_url, number):
                 break
             for user in js:
                 user_names.append(user["login"])
+        print(str(len(user_names)) + " users found!")
         print("\n\nThe top contributors are\n")
         for user in user_names:
             display = "%30s" % (user.encode('ascii', 'ignore'))
@@ -167,8 +170,8 @@ def main(url, number, category):
     print("Successfully gathered coordinates of user locations!\n")
 
 if __name__ == '__main__':
-    parser = optparse.OptionParser(usage="usage: %prog [options] filename", version="%prog 1.0")
-    parser.add_option("-n", "--number", dest = "max_number", default = 1, help = "Specify the number of pages to be searched for. The default value is 1.")
+    parser = optparse.OptionParser(usage="usage: %prog [options] git_url", version="%prog 1.0")
+    parser.add_option("-n", "--number", dest = "max_number", default = 42, help = "Specify the number of users to be searched for. The default value is 42.")
     parser.add_option("-u", "--url", dest = "git_url", default = "https://github.com/python/pythondotorg.git", help = "Specify the url of git repository. The default points to https://github.com/python/pythondotorg.git.")
     parser.add_option("-c", "--contributors", dest = "contributors", default = True, action = "store_true", help = "Use this flag if you want to display contributors on the map, this is the default choice.")
     parser.add_option("-s", "--stargazers", dest = "stargazers", default = False, action = "store_true", help = "Use this flag if you want to display stargazers on the map.")
