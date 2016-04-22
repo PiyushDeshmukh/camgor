@@ -44,5 +44,5 @@ Additional functionality can be achieved by passing some flags, see help menu or
                             location file.
 
 
- ## License
+## License
 MIT License.

@@ -38,7 +38,7 @@ def fetch_user_names(hit_url, number):
         pages = int(math.ceil(number/100.0))
         for page in xrange(pages):
             print("\nFetching json for page " + str(page+1))
-            handler = urllib.urlopen(hit_url + "&page=" + str(page+1) + "&per_page=" + str(100 if page != pages-1 else number%100))
+            handler = urllib.urlopen(hit_url + "&page=" + str(page+1) + "&per_page=" + str(100 if page != pages-1 else 100 if number is 100 else number%100))
             data = handler.read()
             js = json.loads(str(data))
             print("Fetched json!")
