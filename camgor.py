@@ -57,6 +57,12 @@ def fetch_user_names(hit_url, number):
             data = handler.read()
             js = json.loads(str(data))
             print("Fetched json!")
+            try:
+                if js["message"] == "Not Found":
+                    print("Specified repository does not exist!\nExiting...")
+                    exit(0)
+            except:
+                pass
             if len(js) == 0:
                 break
             for user in js:
