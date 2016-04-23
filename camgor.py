@@ -9,6 +9,21 @@ import math
 
 github_api_token = open("token.txt", 'r').read().strip()
 
+def sanityCheck(url):
+    """
+    Checks for a valid url pattern, and returns True if valid, False otherwise
+        url: string
+        valid: boolean
+    """
+    splitted_url = url.split('/')
+    valid = False
+    try:
+        if splitted_url[0] == "https:" and splitted_url[1] == "" and splitted_url[2] == "github.com" and splitted_url[4].split('.')[1] == "git":
+            valid = True
+    except:
+        pass
+    return valid
+
 def get_api_url(url, category):
     """
     Return the url corresponding to the api
@@ -125,7 +140,7 @@ def gather_coordinates():
 
 def generate_map(url):
     print("Creating the map.")
-    map_blueprint = open("where.html", "r")#.read().split("\n")
+    map_blueprint = open("where.html", "r")
     map_visualize = []
     for index, line in enumerate(map_blueprint):
         if index == 4:
@@ -138,6 +153,10 @@ def generate_map(url):
     print("Map successfully created!\n")
 
 def main(url, number, category):
+    valid = sanityCheck(url)
+    if not valid:
+        print("The repository url entered is not valid!!\nExiting...")
+        exit(0)
     hit_url = get_api_url(url, category)
     print("Attempting to fetch user names\n")
     user_names = fetch_user_names(hit_url, number)
