@@ -35,8 +35,6 @@ def get_api_url(url, category):
     splitted_url = url.split('/')
     user = splitted_url[3]
     repo = splitted_url[4].split('.')[0]
-    #hit_url = []
-    # /contributors or /stargazers or watchers
     hit_url = serviceurl + user + '/' + repo + '/' + category + "?access_token=" + github_api_token
     return hit_url
 
@@ -215,7 +213,7 @@ if __name__ == '__main__':
     os.system("python2 camgor/dump.py")
     generate_map(options.git_url)
     print "Opening map.html for visualization!"
-    #os.system("firefox map.html")
+    os.system("firefox camgor/map.html")
 
     if not options.keep_db:
         os.system("rm camgor/coordinates.db")

@@ -1,6 +1,7 @@
 *.db
 *.data
 *.js
+*.pyc
 token.txt
 watchers
 stargazers
