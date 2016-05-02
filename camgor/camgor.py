@@ -48,6 +48,8 @@ def fetch_user_names(hit_url, number):
     try:
         user_names = []
         number = int(number)
+        if number <= 0:
+            return []
         pages = int(math.ceil(number/100.0))
         for page in xrange(pages):
             print("\nFetching json for page " + str(page+1))
