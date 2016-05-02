@@ -1,10 +1,10 @@
 from camgor.camgor import *
 
 """
-Tests whether Camgor fetches usernames till the limited number
+Tests whether Camgor fetches user locations till the limited number
 """
 
-def test_fetch_user_names():
+def test_fetch_user_locations():
     """
     checks if number of usernames are fetched are as the one desired in the input
     """
@@ -16,6 +16,8 @@ def test_fetch_user_names():
     for person in category:
         for index, number in enumerate(query_numbers):
             user_names = fetch_user_names("https://api.github.com/repos/angular/angular/" + person, number)
-            assert  len(user_names) == expected_numbers[index]
+            user_locations = fetch_user_locations(user_names)
+            assert  len(user_locations) <= expected_numbers[index]
             user_names = fetch_user_names("https://api.github.com/repos/facebook/react/" + person, number)
-            assert  len(user_names) == expected_numbers[index]
+            user_locations = fetch_user_locations(user_names)
+            assert  len(user_locations) <= expected_numbers[index]

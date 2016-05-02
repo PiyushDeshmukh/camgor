@@ -77,6 +77,7 @@ def fetch_user_names(hit_url, number):
     except Exception as e:
         print(e)
         exit()
+
 def fetch_user_locations(user_names):
     """
     Returns a list of addresses of users who had contributed to that repo(not all)
@@ -172,7 +173,7 @@ def main(url, number, category):
     user_locations = fetch_user_locations(user_names)
     print("Successfully fetched user locations!\n")
 
-    print("Filering the locations ... ")
+    print("Filtering the locations ... ")
     user_loc = []
     for loc in filter(lambda x: x != None, user_locations):
         try:
