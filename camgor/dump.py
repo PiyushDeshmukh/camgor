@@ -2,7 +2,7 @@ import sqlite3
 import json
 import codecs
 
-conn = sqlite3.connect('coordinates.db')
+conn = sqlite3.connect('camgor/coordinates.db')
 cur = conn.cursor()
 
 cur.execute("SELECT * FROM Locations;")

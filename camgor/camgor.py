@@ -7,7 +7,7 @@ import ssl
 import optparse
 import math
 
-github_api_token = open("token.txt", 'r').read().strip()
+github_api_token = open("camgor/token.txt", 'r').read().strip()
 
 def sanityCheck(url):
     """
@@ -112,7 +112,7 @@ def gather_coordinates():
     # scontext = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
     scontext = None
 
-    conn = sqlite3.connect('coordinates.db')
+    conn = sqlite3.connect('camgor/coordinates.db')
     cur = conn.cursor()
 
 
@@ -122,7 +122,7 @@ def gather_coordinates():
     cur.execute('''
     CREATE TABLE Locations (address TEXT, geodata TEXT);''')
 
-    fh = open("where.data", 'r')
+    fh = open("camgor/where.data", 'r')
 
     for line in fh:
         address = line.strip()
@@ -146,7 +146,7 @@ def gather_coordinates():
 
 def generate_map(url):
     print("Creating the map.")
-    map_blueprint = open("where.html", "r")
+    map_blueprint = open("camgor/where.html", "r")
     map_visualize = []
     for index, line in enumerate(map_blueprint):
         if index == 4:
@@ -154,7 +154,7 @@ def generate_map(url):
         else:
             map_visualize.append(line)
     map_blueprint.close()
-    with open("map.html", "w") as map_file:
+    with open("camgor/map.html", "w") as map_file:
         map_file.writelines(map_visualize)
     print("Map successfully created!\n")
 
@@ -183,7 +183,7 @@ def main(url, number, category):
     print("Successfully filtered the locations!\n")
 
     print("Writing to file ...")
-    fh = open('where.data', 'w')
+    fh = open('camgor/where.data', 'w')
     for loc in user_loc:
         fh.write(loc + '\n')
     fh.close()
@@ -212,13 +212,13 @@ if __name__ == '__main__':
         category = "watchers"
     main(options.git_url, options.max_number, category)
 
-    os.system("python2 dump.py")
+    os.system("python2 camgor/dump.py")
     generate_map(options.git_url)
     print "Opening map.html for visualization!"
-    os.system("firefox map.html")
+    #os.system("firefox map.html")
 
     if not options.keep_db:
-        os.system("rm coordinates.db")
+        os.system("rm camgor/coordinates.db")
     if not options.keep_locations:
-        os.system("rm where.data")
-    os.system("rm map.html")
+        os.system("rm camgor/where.data")
+    os.system("rm camgor/map.html")
