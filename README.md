@@ -1,4 +1,6 @@
 
+https://travis-ci.org/PiyushDeshmukh/camgor.svg?branch=master
+
 # camgor
 
 [camgor](https://github.com/PiyushDeshmukh/camgor) helps you visualize the geographical distribution of contributors of any repository.
