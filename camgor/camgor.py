@@ -76,7 +76,7 @@ def fetch_user_names(hit_url, number):
         return user_names
     except Exception as e:
         print(e)
-        exit()
+        return []
 
 def fetch_user_locations(user_names):
     """
