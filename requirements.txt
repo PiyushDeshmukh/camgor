@@ -1,6 +1,5 @@
 # For Travis CI
 nose==1.3.7
-urllib==1.17
 json==2.0.9
 optparse==1.5.3
 sqlite3==2.6.0
