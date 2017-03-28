@@ -13,6 +13,12 @@ plot stargazers, and watchers of a particular repo.
 camgor expects you to have the [github's API token](https://github.com/settings/tokens/new), and store it in token.txt file in the
 root directory.
 
+## Creating Environment
+
+To recreate the environment from conda, use environment.yml file.
+
+    conda env create -f environment.yml
+
 ## Usage
 camgor is built on python 2.7
 
